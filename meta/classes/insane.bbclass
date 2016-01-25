@@ -1095,12 +1095,15 @@ Rerun configure task after fixing this. The path was '%s'""" % root)
         ml = d.getVar("MLPREFIX", True) or ""
         if bb.data.inherits_class('native', d) or bb.data.inherits_class('cross', d) or bb.data.inherits_class('crosssdk', d) or bb.data.inherits_class('nativesdk', d):
             gt = "gettext-native"
+            gt2 = "gettext-minimal-native"
         elif bb.data.inherits_class('cross-canadian', d):
             gt = "nativesdk-gettext"
         else:
             gt = "virtual/" + ml + "gettext"
+            gt2 = "virtual/" + ml + "gettext-minimal"
+
         deps = bb.utils.explode_deps(d.getVar('DEPENDS', True) or "")
-        if gt not in deps:
+        if gt not in deps and gt2 not in deps:
             for config in configs:
                 gnu = "grep \"^[[:space:]]*AM_GNU_GETTEXT\" %s >/dev/null" % config
                 if subprocess.call(gnu, shell=True) == 0:

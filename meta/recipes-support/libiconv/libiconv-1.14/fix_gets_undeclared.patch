@@ -1,0 +1,31 @@
+From acea7277543266c4ba98b8444a3396849e5143ed Mon Sep 17 00:00:00 2001
+From: Hyungwon Hwang <hyungwon.hwang7@gmail.com>
+Date: Fri, 18 Dec 2015 19:49:20 +0900
+Subject: [PATCH] Fix build error: 'gets' undeclared
+
+./stdio.h:1048:1: error: 'gets' undeclared here (not in a function)
+_GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
+
+Signed-off-by: Hyungwon Hwang <hyungwon.hwang7@gmail.com>
+---
+ srclib/stdio.in.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/srclib/stdio.in.h b/srclib/stdio.in.h
+index 473c84c..474bcb5 100644
+--- a/srclib/stdio.in.h
++++ b/srclib/stdio.in.h
+@@ -695,8 +695,10 @@ _GL_CXXALIASWARN (gets);
+ /* It is very rare that the developer ever has full control of stdin,
+    so any use of gets warrants an unconditional warning.  Assume it is
+    always declared, since it is required by C89.  */
++#if defined(__GLIBC__) && !defined(__UCLIBC__) && !__GLIBC_PREREQ(2, 16)
+ _GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
+ #endif
++#endif
+ 
+ 
+ #if @GNULIB_OBSTACK_PRINTF@ || @GNULIB_OBSTACK_PRINTF_POSIX@
+-- 
+2.5.0
+

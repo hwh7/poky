@@ -18,6 +18,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=1b20675cd5158442f6007d022f46b35b"
 
 inherit native
 
+PROVIDES = "virtual/gettext-minimal virtual/nativesdk-gettext-minimal"
 
 S = "${WORKDIR}"
 

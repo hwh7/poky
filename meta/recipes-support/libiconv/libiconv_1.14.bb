@@ -13,6 +13,7 @@ LIC_FILES_CHKSUM = "file://COPYING.LIB;md5=9f604d8a4f8e74f4f5140845a21b6674 \
 SRC_URI = "${GNU_MIRROR}/${BPN}/${BPN}-${PV}.tar.gz \
            file://autoconf.patch \
            file://add-relocatable-module.patch \
+	   file://fix_gets_undeclared.patch \
           "
 
 SRC_URI[md5sum] = "e34509b1623cec449dfeb73d7ce9c6c6"
@@ -20,13 +21,12 @@ SRC_URI[sha256sum] = "72b24ded17d687193c3366d0ebe7cde1e6b18f0df8c55438ac95be39e8
 
 S = "${WORKDIR}/libiconv-${PV}"
 
-inherit autotools pkgconfig gettext
+inherit autotools pkgconfig
+DEPENDS = "virtual/gettext-minimal gettext-minimal-native glibc"
 
 python __anonymous() {
     if d.getVar("TARGET_OS", True) != "linux":
         return
-    if d.getVar("TCLIBC", True) == "glibc":
-        raise bb.parse.SkipPackage("libiconv is provided for use with uClibc only - glibc already provides iconv")
 }
 
 EXTRA_OECONF += "--enable-shared --enable-static --enable-relocatable"
