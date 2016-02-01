@@ -34,6 +34,7 @@ SRC_URI = "file://functions \
            file://dmesg.sh \
            file://logrotate-dmesg.conf \
            file://kodi.sh \
+           file://transmission-daemon.sh \
 "
 
 S = "${WORKDIR}"
@@ -103,6 +104,7 @@ do_install () {
 	install -m 0755    ${WORKDIR}/dmesg.sh		${D}${sysconfdir}/init.d
 	install -m 0644    ${WORKDIR}/logrotate-dmesg.conf ${D}${sysconfdir}/
 	install -m 0755    ${WORKDIR}/kodi.sh ${D}${sysconfdir}/init.d
+	install -m 0755    ${WORKDIR}/transmission-daemon.sh ${D}${sysconfdir}/init.d
 
 	if [ "${TARGET_ARCH}" = "arm" ]; then
 		install -m 0755 ${WORKDIR}/alignment.sh	${D}${sysconfdir}/init.d
@@ -141,6 +143,7 @@ do_install () {
 	update-rc.d -r ${D} dmesg.sh start 38 S .
 
 	update-rc.d -r ${D} kodi.sh start 65 5 .
+	update-rc.d -r ${D} transmission-daemon.sh start 66 5 .
 }
 
 MASKED_SCRIPTS = " \
